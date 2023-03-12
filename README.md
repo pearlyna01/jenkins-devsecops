@@ -128,7 +128,7 @@ After the build job is completed, the dependency check results can be displayed 
 
 ## Pipeline explained
 
-**Basic stages**
+**Basic stages**   
 The pipeline first goes through the usual stages:
 
 1. git checkout
@@ -136,7 +136,7 @@ The pipeline first goes through the usual stages:
 3. build the app
 4. run tests
 
-**Scanning stages**
+**Scanning stages**  
 The pipeline then goes through scanning stages for any vulnerabilities:  
 
 5. GitLeaks for secret scanning 
