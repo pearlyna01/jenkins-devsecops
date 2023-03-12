@@ -1,0 +1,79 @@
+// Simple pipeline for a Nodejs app
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'NodeJS'
+    }
+
+    options {
+        // add timestamps to console
+        timestamps()
+    }
+    
+    // parameters {
+       // parameters cannot be empty 
+       // add some parameters here
+    // }
+
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', credentialsId: 'gitlab-creds', url: 'http://gitlab/gitlab-instance-***/enter-repo-name.git'
+            }
+        }
+
+        stage("Install node modules") {
+            steps {
+                sh 'npm i'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage("Test") {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage("Secret Scanning: GitLeaks") {
+            steps {
+                sh 'gitleaks detect -v'
+            }
+        }
+
+        stage("SAST: SonarQube") {
+            steps {
+                script {
+                    def scannerHome = tool 'sonar-scanner';
+
+                    withSonarQubeEnv('sonarqube') { 
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
+        stage ("SCA: OWASP Dependency-Check") {
+            steps {
+                // invoke dependency check where the odcInstallation refers to 
+                // the dependencyCheck tool's name at "Global Tool Configuration"
+                dependencyCheck additionalArguments: ''' 
+                    -o "./" 
+                    -s "./"
+                    -f "XML" 
+                    --prettyPrint''', odcInstallation: 'dependencyCheckInstallation'
+
+                // publish dependency results to Jenkins job
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        } 
+    }
+}
+
+// reference for dependency-check plugin = https://www.jenkins.io/doc/pipeline/steps/dependency-check-jenkins-plugin/

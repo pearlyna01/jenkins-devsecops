@@ -1,0 +1,51 @@
+version: "1.0"
+
+services:
+  # gitlab service
+  gitlab:
+    container_name: gitlab-repo
+    image: gitlab/gitlab-ee:latest
+    ports:
+      - "443:443"
+      - "80:80"
+      - "22:22"
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    shm_size: "256m"
+    networks:
+      - devops
+
+  # jenkins service 
+  jenkins-blueocean:
+    container_name: jenkins-blueocean
+    build: 
+      dockerfile: customJenkins.Dockerfile
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - devops
+    volumes:
+      - jenkins-data:/var/jenkins_home
+  
+  # sonarQube service
+  sonarQube:
+    image: sonarqube
+    container_name: sonarQube
+    environment: 
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    ports: 
+      - "9000:9000"
+    networks:
+      - devops
+
+volumes:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+  jenkins-data:
+
+networks:
+  devops: {}
