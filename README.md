@@ -11,7 +11,7 @@ The project contains a docker compose yaml file which setup the following contai
 Reference used for creating the pipeline: https://owasp.org/www-project-devsecops-guideline/latest/
 
 ## Getting Started
----
+
 ### Requirements
 - Docker Compose V2
 - Internet
@@ -53,8 +53,10 @@ Reference used for creating the pipeline: https://owasp.org/www-project-devsecop
 
 4. Setup the credentials for Jenkins to connect to SonarQube and Gitlab
    - Goto Manage Jenkins > Manage Credentials
-   - Click on the arrow button beside (global) > Add credentials
+   - Click on the arrow button beside (global) > Add credentials  
+
 <img src="./screenshots/Screenshot-jenkins-credentials.png" alt= “jenkins-credentials-page” width="500px" height="500px">
+   
    - Create the following credentials 
      - Id: gitlab-creds
        - kind: username with password
@@ -123,8 +125,8 @@ After the build job is completed, the dependency check results can be displayed 
   - use the format ```'<b>'HH:mm:ss a'</b> '``` for ```hour:min:sec AM/PM```
 
 ## Pipeline explained
----
-### Basic stages
+
+**Basic stages**   
 The pipeline first goes through the usual stages:
 
 1. git checkout
@@ -132,7 +134,7 @@ The pipeline first goes through the usual stages:
 3. build the app
 4. run tests
 
-### Scanning stages
+**Scanning stages**  
 The pipeline then goes through scanning stages for any vulnerabilities:  
 
 5. Sonarqube for SAST/Static Application Security Testing 
@@ -143,8 +145,7 @@ The pipeline then goes through scanning stages for any vulnerabilities:
 
 *Missing container and gitlaks scanning stages. Didn't have enough resources. :sob:
 
-## Mini Notes
----
+### Miscellaneous Notes
 - Containers in a network should be reachable in the same network. So under the Jenkins settings, it is possible to use ```http://<sonarqube container name>:9000```
-- Declare the name of the tools is important as they are used in the Jenkins pipeline file
-- Inital usernames and passwords could have been added in the docker files
+- Declare the name of the tools. The tool names are used in the Jenkins pipeline file
+- Inital usernames and passwords could have been added in the docker files.
