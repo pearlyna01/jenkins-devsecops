@@ -1,27 +1,29 @@
 # Simple DevSecOps with Docker
-A simple DevSecOps CI (Continuous Integration) pipeline based on the guide from OWASP. It uses Gitlab, SonarQube and Jenkins to automate the CI pipeline for a NodeJs App.  
-The project contains a docker compose yaml file which setup the following containers:
+Hello internet, I made a simple DevSecOps CI (Continuous Integration) pipeline based on some of the guidelines from OWASP and documented the steps that I made in this README file. It uses Gitlab, SonarQube and Jenkins docker images to automate a CI pipeline for a NodeJs App.  
+
+This project contains a docker compose yaml file which setup the following containers:
   - Gitlab
   - jenkins-blueocean (custom jenkins image with blueocean plugin)
   - sonarQube
-(Note: The Jenkins pipeline is missing container scanning at the moment.)
 
-**This is meant to experiment with open source DevSecOps tools. Feel free to try it out** :wave:
+**I'm still learning. So feel free to give any feedback!** :wave:
 
-Reference used for creating the pipeline: https://owasp.org/www-project-devsecops-guideline/latest/
+More details on using open-source devops tools can be found at https://owasp.org/www-project-devsecops-guideline/latest/  
 
-## Getting Started
+<br/>
 
-### Requirements
+**Requirements**
 - Docker Compose V2
 - Internet
-- Lots of RAM (at least 16GB +)
+- Lots of RAM (at least 16GB)
+
+<br/>
 
 ### How to setup the pipeline 
 1. Use the available scripts to start the docker-compose:
-     - use the docker-compose-up.sh to start docker compose
+     - use the docker-compose-up.sh file to start docker compose
        - command: ```sh docker-compose-up.sh```
-     - use the docker-compose-up.sh to down docker compose (if containers need to be removed)
+     - use the docker-compose-up.sh file to down docker compose (if containers need to be removed)
        - command: ```sh docker-compose-down.sh```
     
     *Note that it will take some time for the containers to startup (especially Gitlab container :disappointed:)
@@ -112,10 +114,11 @@ Reference used for creating the pipeline: https://owasp.org/www-project-devsecop
 9. Click on " > Build Now " to start the pipeline  
     *note that it will take some time for the tools to be installed in the Jenkins container initially
 
-After the build job is completed, the dependency check results can be displayed in the job results. The sonarqube results can be viewed at http://localhost:9000. The Gitleaks results can be viewed in the console output (Use blueocean to view it).  
+After the build job is completed, the dependency check results can be displayed in the job results. The sonarqube results can be viewed at http://localhost:9000. The Gitleaks results can be viewed in the console output (Use blueocean to view it). 
 
-    
-### Other settings
+<br/>
+
+### Additional settings
 - Adjust the time zone for the timestamp in the console output
   - Click on the user > Configure  
   ![jenkins user configure](./screenshots/Screenshot-configureUser.png)
@@ -124,18 +127,15 @@ After the build job is completed, the dependency check results can be displayed 
   - Under Configure System > Timestamper
   - use the format ```'<b>'HH:mm:ss a'</b> '``` for ```hour:min:sec AM/PM```
 
+<br/>
+
 ## Pipeline explained
-
-**Basic stages**   
-The pipeline first goes through the usual stages:
-
+The pipeline first goes through the usual basic stages and starts scanning for vulnerabilties after that.  
+ 
 1. git checkout
 2. install node modules
 3. build the app
 4. run tests
-
-**Scanning stages**  
-The pipeline then goes through scanning stages for any vulnerabilities:  
 
 5. Sonarqube for SAST/Static Application Security Testing 
    - test for vulnerabilities within code 
@@ -143,9 +143,11 @@ The pipeline then goes through scanning stages for any vulnerabilities:
 6. Dependency Check for SCA/Software Composition Analysis
    - scans for vulnerabilities in open source libraries that are used  
 
-*Missing container and gitlaks scanning stages. Didn't have enough resources. :sob:
+*(Missing container and gitlaks scanning stages. I didn't have enough resources to run them.)* :sob:
 
-### Miscellaneous Notes
+<br/>
+
+### Lessons learnt
 - Containers in a network should be reachable in the same network. So under the Jenkins settings, it is possible to use ```http://<sonarqube container name>:9000```
 - Declare the name of the tools. The tool names are used in the Jenkins pipeline file
 - Inital usernames and passwords could have been added in the docker files.
