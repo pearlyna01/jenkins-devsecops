@@ -1,5 +1,5 @@
 # Simple DevSecOps with Docker
-Hello internet, I made a simple DevSecOps CI (Continuous Integration) pipeline based on some of the guidelines from OWASP and documented the steps that I made in this README file. It uses Gitlab, SonarQube and Jenkins docker images to automate a CI pipeline for a NodeJs App.  
+Hello internet, I made an experiment with a simple DevSecOps CI (Continuous Integration) pipeline based on some of the guidelines from OWASP and documented the steps that I made in this README file. It uses Gitlab, SonarQube and Jenkins docker images to automate a CI pipeline for a NodeJs App.  
 
 This project contains a docker compose yaml file which setup the following containers:
   - Gitlab
