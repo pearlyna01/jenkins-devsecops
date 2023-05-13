@@ -6,7 +6,7 @@ The project contains a docker compose yaml file which setup the following contai
   - sonarQube
 (Note: The Jenkins pipeline is missing container scanning at the moment.)
 
-**This is meant to experiment with open source devsecop tools. Feel free to try it out**
+**This is meant to experiment with open source DevSecOps tools. Feel free to try it out** :wave:
 
 Reference used for creating the pipeline: https://owasp.org/www-project-devsecops-guideline/latest/
 
@@ -75,7 +75,7 @@ Reference used for creating the pipeline: https://owasp.org/www-project-devsecop
        - Name: sonarqube
        - Server URL: http://sonarQube:9000 (sonarQube is the name of the sonarqube container)
        - Server authentication token: choose authentication token for sonarqube
-   - Setup tools
+   - Setup tools according to the following settings
      - Goto Configure Jenkins > Global Tools Configuration
        - NodeJS
          - Click on Add NodeJS
@@ -93,28 +93,26 @@ Reference used for creating the pipeline: https://owasp.org/www-project-devsecop
          - [x] Install automatically
          - Choose the version to install
 
-6. Install GitLeaks in the Jenkins container
-    - reference: https://github.com/gitleaks/gitleaks
-
-7. Push your NodeJs code into Gitlab container
+6. Push your NodeJs code into Gitlab container
     - note that git remote url will look something like this if you are using localhost  
     ```http://host.docker.internal:80/gitlab-instance-****/repo-name.git```
 
-8. Add the Jenkinsfile and sonar-project.properties files from the pipeline_AddOns folder to the repo
+7. Add the Jenkinsfile and sonar-project.properties files from the pipeline_AddOns folder to the repo
    - modify the sonar-project.properties file to suit the NodeJS project  
 
-9. Create a pipeline item in Jenkins
+8. Create a pipeline item in Jenkins
     - Definition: Pipeline script from SCM
     - Repository url: http://gitlab/gitlab-instance-****/repo-name.git
     - Credentials: (choose the one with the gitlab credentials description)
     - Script Path (path to the jenkins file): Jenkins
       *Jenkins file can be renamed with .Jenkinsfile extension e.g. pipeline.Jenkinsfile  
 
-10.  Click on " > Build Now " to start the pipeline  
+9. Click on " > Build Now " to start the pipeline  
     *note that it will take some time for the tools to be installed in the Jenkins container initially
 
-After the build job is completed, the dependency check results can be displayed in the job results. The sonarqube results can be viewed at http://localhost:9000. The Gitleaks results can be viewed in the console output (Use blueocean to view it).
+After the build job is completed, the dependency check results can be displayed in the job results. The sonarqube results can be viewed at http://localhost:9000. The Gitleaks results can be viewed in the console output (Use blueocean to view it).  
 
+    
 ### Other settings
 - Adjust the time zone for the timestamp in the console output
   - Click on the user > Configure  
@@ -137,16 +135,13 @@ The pipeline first goes through the usual stages:
 ### Scanning stages
 The pipeline then goes through scanning stages for any vulnerabilities:  
 
-5. GitLeaks for secret scanning 
-   - scans for any secrets that is hard coded into the code  
-
-6. Sonarqube for SAST/Static Application Security Testing 
+5. Sonarqube for SAST/Static Application Security Testing 
    - test for vulnerabilities within code 
 
-7. Dependency Check for SCA/Software Composition Analysis
+6. Dependency Check for SCA/Software Composition Analysis
    - scans for vulnerabilities in open source libraries that are used  
 
-*Missing container scanning stage
+*Missing container and gitlaks scanning stages. Didn't have enough resources. :sob:
 
 ## Mini Notes
 ---

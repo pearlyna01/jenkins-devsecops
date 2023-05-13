@@ -41,12 +41,6 @@ pipeline {
             }
         }
 
-        stage("Secret Scanning: GitLeaks") {
-            steps {
-                sh 'gitleaks detect -v'
-            }
-        }
-
         stage("SAST: SonarQube") {
             steps {
                 script {
